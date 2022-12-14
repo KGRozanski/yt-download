@@ -9,7 +9,7 @@ const chalk = require("chalk");
 //songs data array cant be easily posseseeed using Google Takeout if using YT Music
 const SONGS = require("./data/songs_to_download_decoded_html.json");
 //api daily rquests limit
-const LIMIT = 50;
+const LIMIT = 1;
 /**==============*/
 
 (async function () {
@@ -34,7 +34,7 @@ const LIMIT = 50;
 				const songName = `${song["Wykonawca"]} – ${song["Tytuł utworu"]}`;
 				console.log(chalk.bold("DOWNLOADING: " + songName));
 				shell.exec(
-					`bash fetch.sh \"${response.data.Download_url}\" \"${songName}.mp3\"`
+					`bash fetch.sh \"${response.data.link}\" \"${songName}.mp3\"`
 				);
 				console.log(chalk.bgGreen("OK"));
 			});
