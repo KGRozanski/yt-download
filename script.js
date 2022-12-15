@@ -9,7 +9,7 @@ const chalk = require("chalk");
 //songs data array cant be easily posseseeed using Google Takeout if using YT Music
 const SONGS = require("./data/songs_to_download_decoded_html.json");
 //api daily rquests limit
-const LIMIT = 1;
+const LIMIT = 50;
 /**==============*/
 
 (async function () {
@@ -44,6 +44,8 @@ const LIMIT = 1;
 			break;
 		}
 	}
+
+	// escape()
 })();
 
 /**
@@ -52,17 +54,18 @@ const LIMIT = 1;
  */
 function escape() {
 	let temp = [];
-
 	SONGS.forEach((song) => {
+
 		temp.push({
 			...song,
-			"Tytuł utworu": htmldecode.decode(song["Tytuł utworu"]),
-			Wykonawca: htmldecode.decode(song["Wykonawca"]),
+			"Tytuł utworu": (htmldecode.decode(song["Tytuł utworu"])).toString().replace(/\"/g, "'").replace(":", ""),
+			"Tytuł albumu": (htmldecode.decode(song["Tytuł albumu"] || "")).toString().replace(/\"/g, "'").replace(":", ""),
+			Wykonawca: (htmldecode.decode(song["Wykonawca"])).toString().replace(/\"/g, "'").replace(":", ""),
 		});
 	});
 
 	fs.writeFileSync(
-		path.join(__dirname, "./songs_to_download_decoded_html.json"),
+		path.join(__dirname, "./data/songs_to_download_decoded_html.json"),
 		JSON.stringify(temp),
 		"utf8"
 	);
@@ -95,3 +98,5 @@ function match() {
 		"utf8"
 	);
 }
+
+
